@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Mehta",
+    "department": "Engineering",
+    "city": "Bengaluru",
+    "role": "Frontend Engineer",
+    "salary": 1200000
+  },
+  {
+    "id": 2,
+    "name": "Diya Shah",
+    "department": "Engineering",
+    "city": "Pune",
+    "role": "Backend Engineer",
+    "salary": 1450000
+  },
+  {
+    "id": 3,
+    "name": "Kabir Rao",
+    "department": "Sales",
+    "city": "Bengaluru",
+    "role": "Sales Manager",
+    "salary": 1100000
+  },
+  {
+    "id": 4,
+    "name": "Isha Nair",
+    "department": "HR",
+    "city": "Kochi",
+    "role": "HR Manager",
+    "salary": 950000
+  },
+  {
+    "id": 5,
+    "name": "Vihaan Singh",
+    "department": "Engineering",
+    "city": "Hyderabad",
+    "role": "ML Engineer",
+    "salary": 1750000
+  },
+  {
+    "id": 6,
+    "name": "Anaya Patel",
+    "department": "Finance",
+    "city": "Mumbai",
+    "role": "Financial Analyst",
+    "salary": 1300000
+  }
+]

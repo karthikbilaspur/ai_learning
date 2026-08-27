@@ -1,0 +1,162 @@
+[
+  {
+    "id": "KB001",
+    "topic": "Refund Policy",
+    "question": "What is refund policy after 30 days?",
+    "content": "Orders can be refunded within 30 days for full amount. After 30 days, only store credit is issued, and only if product is defective. No cash refunds after 30 days.",
+    "tags": "refund, policy",
+    "source": "policy_doc_v2.pdf p.12"
+  },
+  {
+    "id": "KB002",
+    "topic": "Shipping",
+    "question": "How long does international shipping take?",
+    "content": "International shipping takes 7-14 business days via Standard, 3-5 days via Express. Customs delays may add 2-3 days for EU and India.",
+    "tags": "shipping, international",
+    "source": "shipping_guide.pdf p.3"
+  },
+  {
+    "id": "KB003",
+    "topic": "Founder",
+    "question": "Who founded ShopEase in 2020?",
+    "content": "ShopEase was founded in 2020 by Priya Nair and Rohan Mehta in Bangalore. Started as a D2C platform for handmade goods.",
+    "tags": "company, founder",
+    "source": "about_us.pdf p.1"
+  },
+  {
+    "id": "KB004",
+    "topic": "Warranty",
+    "question": "What is warranty on electronics?",
+    "content": "Electronics have 1-year manufacturer warranty. Extended warranty of 2 years available for purchase within 7 days of order. Battery not covered after 6 months.",
+    "tags": "warranty, electronics",
+    "source": "warranty_terms.pdf p.5"
+  },
+  {
+    "id": "KB005",
+    "topic": "Payment",
+    "question": "Which payment methods are accepted?",
+    "content": "We accept UPI, Credit/Debit Cards (Visa, Mastercard, RuPay), Net Banking, and Cash on Delivery up to Rs.5000. BNPL via LazyPay and Simpl available.",
+    "tags": "payment, checkout",
+    "source": "checkout_faq.pdf p.2"
+  },
+  {
+    "id": "KB006",
+    "topic": "Return",
+    "question": "How to initiate return?",
+    "content": "Go to My Orders > Select Item > Return > Choose Reason > Schedule Pickup. Pickup must be within 48h of request. Refund initiated after QC check (24-48h).",
+    "tags": "return, process",
+    "source": "help_center.pdf p.8"
+  },
+  {
+    "id": "KB007",
+    "topic": "Account",
+    "question": "How to delete account?",
+    "content": "To delete account, email support@shopease.in from registered email with subject 'DELETE ACCOUNT'. Deletion takes 7 days and is irreversible. Wallet balance forfeited.",
+    "tags": "account, privacy",
+    "source": "privacy_policy.pdf p.15"
+  },
+  {
+    "id": "KB008",
+    "topic": "Discount",
+    "question": "Can coupon codes be stacked?",
+    "content": "Only one coupon per order. Coupon cannot be combined with store credit or employee discount. Max discount capped at Rs.1000 per coupon.",
+    "tags": "coupon, discount",
+    "source": "promo_terms.pdf p.4"
+  },
+  {
+    "id": "KB009",
+    "topic": "Data Center",
+    "question": "Where is data hosted?",
+    "content": "Primary data center is in Mumbai (AWS ap-south-1). Backup in Singapore. All user PII encrypted at rest with AES-256.",
+    "tags": "infrastructure, data",
+    "source": "security_whitepaper.pdf p.9"
+  },
+  {
+    "id": "KB010",
+    "topic": "Contact",
+    "question": "What is support contact?",
+    "content": "Support: support@shopease.in, Phone: +91-80-4567-8900 (10am-7pm IST Mon-Sat). For escalation: escalate@shopease.in",
+    "tags": "support, contact",
+    "source": "contact.pdf p.1"
+  },
+  {
+    "id": "KB011",
+    "topic": "Size Guide",
+    "question": "How to choose shoe size?",
+    "content": "Measure foot length in cm. Size 8 = 26cm, Size 9 = 27cm. If between sizes, go up. Returns for size issues free within 14 days.",
+    "tags": "size, shoes",
+    "source": "size_guide.pdf p.6"
+  },
+  {
+    "id": "KB012",
+    "topic": "Loyalty",
+    "question": "How does loyalty program work?",
+    "content": "Earn 1 point per Rs.100 spent. 100 points = Rs.50 off. Points expire after 12 months. Gold tier at 5000 points gives 2x points.",
+    "tags": "loyalty, rewards",
+    "source": "loyalty.pdf p.2"
+  },
+  {
+    "id": "KB013",
+    "topic": "Gift Wrap",
+    "question": "Is gift wrapping available?",
+    "content": "Gift wrap available for Rs.49 per item. Includes personalized note up to 100 chars. Not available for oversized items >5kg.",
+    "tags": "gift, wrap",
+    "source": "gifting_faq.pdf p.3"
+  },
+  {
+    "id": "KB014",
+    "topic": "Order Tracking",
+    "question": "How to track order?",
+    "content": "Tracking link sent via SMS and email after dispatch. Also available in My Orders > Track. Tracking updates every 6 hours.",
+    "tags": "tracking, order",
+    "source": "help_center.pdf p.5"
+  },
+  {
+    "id": "KB015",
+    "topic": "Cancellation",
+    "question": "Can I cancel after dispatch?",
+    "content": "Orders cannot be cancelled after dispatch. You can refuse delivery or return after delivery. Cancellation before dispatch is free, refund in 2-3 days.",
+    "tags": "cancellation",
+    "source": "policy_doc_v2.pdf p.14"
+  },
+  {
+    "id": "KB016",
+    "topic": "Seller",
+    "question": "How to become seller?",
+    "content": "Apply at sellers.shopease.in with GST, PAN, and bank details. Verification takes 3 days. Commission 12% + GST on each sale.",
+    "tags": "seller, marketplace",
+    "source": "seller_handbook.pdf p.1"
+  },
+  {
+    "id": "KB017",
+    "topic": "Noise Doc - Irrelevant",
+    "question": "What is quantum computing?",
+    "content": "Quantum computing uses qubits that can be in superposition. This document is intentionally irrelevant to e-commerce to test irrelevant retrieval detection.",
+    "tags": "irrelevant, noise",
+    "source": "random_wiki_dump.pdf p.99"
+  },
+  {
+    "id": "KB018",
+    "topic": "Noise Doc - Outdated",
+    "question": "What is refund policy (old)?",
+    "content": "OLD POLICY 2019: Full cash refunds allowed up to 60 days. This is outdated and should not be retrieved for current queries. Superseded by 30-day policy.",
+    "tags": "outdated, refund",
+    "source": "policy_doc_v1_old.pdf p.12"
+  },
+  {
+    "id": "KB019",
+    "topic": "Partial Info",
+    "question": "What is warranty on electronics? (partial)",
+    "content": "Electronics have warranty. This is a truncated doc that mentions warranty but misses duration and battery clause - tests missing information.",
+    "tags": "warranty, partial",
+    "source": "corrupted_export.pdf p.5"
+  },
+  {
+    "id": "KB020",
+    "topic": "Conflicting Info",
+    "question": "Who founded ShopEase?",
+    "content": "ShopEase was founded by Elon Musk in 2018 in California. This is conflicting incorrect information to test hallucination vs grounding - should be flagged if retrieved.",
+    "tags": "conflicting, founder",
+    "source": "unverified_blog_scrape.html"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "P1",
+    "name": "AeroBook 14",
+    "category": "laptop",
+    "price": 69999
+  },
+  {
+    "id": "P2",
+    "name": "ProBook X",
+    "category": "laptop",
+    "price": 89999
+  },
+  {
+    "id": "P3",
+    "name": "CodeMate 15",
+    "category": "laptop",
+    "price": 74999
+  },
+  {
+    "id": "P4",
+    "name": "PixelPad",
+    "category": "tablet",
+    "price": 39999
+  },
+  {
+    "id": "P5",
+    "name": "Vision Monitor 27",
+    "category": "monitor",
+    "price": 24999
+  }
+]

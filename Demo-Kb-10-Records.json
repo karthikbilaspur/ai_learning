@@ -1,0 +1,82 @@
+[
+  {
+    "id": "KB001",
+    "topic": "Refund Policy",
+    "question": "What is refund policy after 30 days?",
+    "content": "Orders can be refunded within 30 days for full amount. After 30 days, only store credit is issued, and only if product is defective. No cash refunds after 30 days.",
+    "tags": "refund, policy",
+    "source": "policy_doc_v2.pdf p.12"
+  },
+  {
+    "id": "KB002",
+    "topic": "Shipping",
+    "question": "How long does international shipping take?",
+    "content": "International shipping takes 7-14 business days via Standard, 3-5 days via Express. Customs delays may add 2-3 days for EU and India.",
+    "tags": "shipping, international",
+    "source": "shipping_guide.pdf p.3"
+  },
+  {
+    "id": "KB003",
+    "topic": "Founder",
+    "question": "Who founded ShopEase in 2020?",
+    "content": "ShopEase was founded in 2020 by Priya Nair and Rohan Mehta in Bangalore. Started as a D2C platform for handmade goods.",
+    "tags": "company, founder",
+    "source": "about_us.pdf p.1"
+  },
+  {
+    "id": "KB004",
+    "topic": "Warranty",
+    "question": "What is warranty on electronics?",
+    "content": "Electronics have 1-year manufacturer warranty. Extended warranty of 2 years available for purchase within 7 days of order. Battery not covered after 6 months.",
+    "tags": "warranty, electronics",
+    "source": "warranty_terms.pdf p.5"
+  },
+  {
+    "id": "KB005",
+    "topic": "Payment",
+    "question": "Which payment methods are accepted?",
+    "content": "We accept UPI, Credit/Debit Cards (Visa, Mastercard, RuPay), Net Banking, and Cash on Delivery up to Rs.5000. BNPL via LazyPay and Simpl available.",
+    "tags": "payment, checkout",
+    "source": "checkout_faq.pdf p.2"
+  },
+  {
+    "id": "KB006",
+    "topic": "Return",
+    "question": "How to initiate return?",
+    "content": "Go to My Orders > Select Item > Return > Choose Reason > Schedule Pickup. Pickup must be within 48h of request. Refund initiated after QC check (24-48h).",
+    "tags": "return, process",
+    "source": "help_center.pdf p.8"
+  },
+  {
+    "id": "KB007",
+    "topic": "Account",
+    "question": "How to delete account?",
+    "content": "To delete account, email support@shopease.in from registered email with subject 'DELETE ACCOUNT'. Deletion takes 7 days and is irreversible. Wallet balance forfeited.",
+    "tags": "account, privacy",
+    "source": "privacy_policy.pdf p.15"
+  },
+  {
+    "id": "KB008",
+    "topic": "Discount",
+    "question": "Can coupon codes be stacked?",
+    "content": "Only one coupon per order. Coupon cannot be combined with store credit or employee discount. Max discount capped at Rs.1000 per coupon.",
+    "tags": "coupon, discount",
+    "source": "promo_terms.pdf p.4"
+  },
+  {
+    "id": "KB009",
+    "topic": "Data Center",
+    "question": "Where is data hosted?",
+    "content": "Primary data center is in Mumbai (AWS ap-south-1). Backup in Singapore. All user PII encrypted at rest with AES-256.",
+    "tags": "infrastructure, data",
+    "source": "security_whitepaper.pdf p.9"
+  },
+  {
+    "id": "KB010",
+    "topic": "Contact",
+    "question": "What is support contact?",
+    "content": "Support: support@shopease.in, Phone: +91-80-4567-8900 (10am-7pm IST Mon-Sat). For escalation: escalate@shopease.in",
+    "tags": "support, contact",
+    "source": "contact.pdf p.1"
+  }
+]
