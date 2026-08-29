@@ -1,0 +1,6 @@
+ai-agent-v4/node_modules/
+ai-agent-v4/dist/
+ai-agent-v4/data/
+ai-agent-v4/.env
+.env
+.DS_Store
