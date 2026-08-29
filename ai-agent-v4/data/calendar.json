@@ -1,0 +1,22 @@
+[
+  {
+    "date": "tomorrow",
+    "time": "10:00",
+    "available": true
+  },
+  {
+    "date": "tomorrow",
+    "time": "11:00",
+    "available": false
+  },
+  {
+    "date": "tomorrow",
+    "time": "14:00",
+    "available": true
+  },
+  {
+    "date": "tomorrow",
+    "time": "16:00",
+    "available": true
+  }
+]
