@@ -1,60 +1,220 @@
-import { redis } from '@/lib/redis'
-import { computeCost, MODEL_PRICING } from '@/lib/pricing'
+import {
+  redis,
+} from '@/lib/redis'
+import {
+  computeCost,
+} from '@/lib/pricing'
+import {
+  getEnv,
+} from '@/lib/env'
 
-export async function GET() {
-  const [hits, misses] = await Promise.all([
-    (redis.get('stats:cache_hit_tier2') as Promise<number | null>).then((v) => v ?? 0),
-    (redis.get('stats:cache_miss') as Promise<number | null>).then((v) => v ?? 0),
-  ])
-  const total = hits + misses
-  const hitRate = total ? ((hits / total) * 100).toFixed(1) : '0.0'
+function isAuthorized(req: Request): boolean {
+  const auth =
+    req.headers.get('authorization')
 
-  const popular = await redis.zrange('cache:popular', 0, 9, { rev: true, withScores: true })
+  if (!auth?.startsWith('Bearer ')) {
+    return false
+  }
 
-  const tierCounts = await Promise.all(
-    (['tiny', 'small', 'large', 'critical'] as const).map(async (t) => ({
-      tier: t,
-      count: ((await redis.get(`stats:tier:${t}`)) as number) || 0,
-    }))
-  )
-  const tierTotal = tierCounts.reduce((s, t) => s + t.count, 0)
-  const tierBreakdown = Object.fromEntries(
-    tierCounts.map((t) => [t.tier, tierTotal ? `${((t.count / tierTotal) * 100).toFixed(0)}%` : '0%'])
-  )
+  const supplied =
+    auth.slice('Bearer '.length).trim()
 
-  // FIX (portfolio pass): avgInputTokens used to be a hardcoded guess (500).
-  // Now derived from a running sum tracked in lib/redis.ts's
-  // recordTokenSample, called from onFinish in the chat route.
-  const [totalPromptTokens, tokenSampleCount] = await Promise.all([
-    (redis.get('stats:total_prompt_tokens') as Promise<number | null>).then((v) => v ?? 0),
-    (redis.get('stats:token_sample_count') as Promise<number | null>).then((v) => v ?? 0),
-  ])
-  const avgInputTokens = tokenSampleCount > 0 ? totalPromptTokens / tokenSampleCount : 500 // fallback until enough samples exist
+  return supplied ===
+    getEnv().CACHE_CRON_SECRET
+}
 
-  const costPerTierHit = Object.fromEntries(
-    (['tiny', 'small', 'large', 'critical'] as const).map((t) => {
-      const modelId = { tiny: 'gpt-4o-mini', small: 'claude-3-5-haiku-20241022', large: 'claude-sonnet-4-20250514', critical: 'claude-opus-4-20250514' }[t]
-      return [t, computeCost(modelId, avgInputTokens, 0)]
-    })
-  ) as Record<string, number>
+export async function GET(req: Request) {
+  if (!isAuthorized(req)) {
+    return new Response(
+      'Unauthorized',
+      { status: 401 }
+    )
+  }
 
-  const estimatedCostSaved = tierCounts.reduce((sum, t) => sum + t.count * (costPerTierHit[t.tier] ?? 0), 0)
-
-  // FIX (portfolio pass): p95_latency was a hardcoded { cache: '15ms', llm:
-  // '1100ms' } literal. Now computed from the rolling sample list recorded
-  // in lib/redis.ts's recordLatencySample.
-  const samplesRaw = (await redis.lrange('stats:latency_samples', 0, -1)) as (string | number)[]
-  const samples = samplesRaw.map(Number).sort((a, b) => a - b)
-  const p95 = samples.length ? samples[Math.floor(samples.length * 0.95)] : null
-
-  return Response.json({
-    hitRate: `${hitRate}%`,
+  const [
     hits,
     misses,
-    costSaved: `$${estimatedCostSaved.toFixed(2)}`,
-    p95_latency_ttft_ms: p95,
-    sample_count: samples.length,
-    popularQueries: popular,
-    tierBreakdown,
+    tier1Hits,
+    tier2Hits,
+  ] = await Promise.all([
+    redis.get<number>(
+      'stats:cache_hits'
+    ),
+    redis.get<number>(
+      'stats:cache_misses'
+    ),
+    redis.get<number>(
+      'stats:cache_hits:tier:1'
+    ),
+    redis.get<number>(
+      'stats:cache_hits:tier:2'
+    ),
+  ])
+
+  const totalHits = hits ?? 0
+  const totalMisses = misses ?? 0
+
+  const total =
+    totalHits + totalMisses
+
+  const hitRate =
+    total > 0
+      ? (totalHits / total) * 100
+      : 0
+
+  const tierNames = [
+    'tiny',
+    'small',
+    'large',
+    'critical',
+  ] as const
+
+  const tierCounts =
+    await Promise.all(
+      tierNames.map(
+        async (tier) => ({
+          tier,
+          count:
+            (await redis.get<number>(
+              `stats:tier:${tier}`
+            )) ?? 0,
+        })
+      )
+    )
+
+  const tierTotal =
+    tierCounts.reduce(
+      (sum, item) =>
+        sum + item.count,
+      0
+    )
+
+  const tierBreakdown =
+    Object.fromEntries(
+      tierCounts.map(
+        ({ tier, count }) => [
+          tier,
+          tierTotal > 0
+            ? `${(
+                (count /
+                  tierTotal) *
+                100
+              ).toFixed(1)}%`
+            : '0%',
+        ]
+      )
+    )
+
+  const [
+    totalPromptTokens,
+    tokenSampleCount,
+    samplesRaw,
+  ] = await Promise.all([
+    redis.get<number>(
+      'stats:total_prompt_tokens'
+    ),
+    redis.get<number>(
+      'stats:token_sample_count'
+    ),
+    redis.lrange<
+      string | number
+    >(
+      'stats:latency_samples',
+      0,
+      -1
+    ),
+  ])
+
+  const samples =
+    samplesRaw
+      .map(Number)
+      .filter(Number.isFinite)
+      .sort(
+        (a, b) => a - b
+      )
+
+  const p95 =
+    samples.length > 0
+      ? samples[
+          Math.min(
+            samples.length - 1,
+            Math.ceil(
+              samples.length *
+                0.95
+            ) - 1
+          )
+        ]
+      : null
+
+  const avgInputTokens =
+    tokenSampleCount &&
+    tokenSampleCount > 0
+      ? totalPromptTokens! /
+        tokenSampleCount
+      : null
+
+  /**
+   * We deliberately don't fabricate a cost estimate
+   * when we have no token samples.
+   */
+  let estimatedCostSaved = 0
+
+  if (avgInputTokens !== null) {
+    const pricing = {
+      tiny: 'gpt-4o-mini',
+      small:
+        'claude-3-5-haiku-20241022',
+      large:
+        'claude-sonnet-4-20250514',
+      critical:
+        'claude-opus-4-20250514',
+    } as const
+
+    for (const item of tierCounts) {
+      const modelId =
+        pricing[item.tier]
+
+      const estimatedCost =
+        computeCost(
+          modelId,
+          avgInputTokens,
+          0
+        )
+
+      estimatedCostSaved +=
+        item.count *
+        estimatedCost
+    }
+  }
+
+  return Response.json({
+    cache: {
+      hitRate:
+        `${hitRate.toFixed(1)}%`,
+      hits: totalHits,
+      misses: totalMisses,
+      exactHits: tier1Hits ?? 0,
+      semanticHits: tier2Hits ?? 0,
+    },
+
+    cost: {
+      estimatedSaved:
+        avgInputTokens === null
+          ? null
+          : `$${estimatedCostSaved.toFixed(
+              2
+            )}`,
+      avgInputTokens,
+    },
+
+    latency: {
+      p95TtftMs: p95,
+      sampleCount:
+        samples.length,
+    },
+
+    routing: {
+      tierBreakdown,
+    },
   })
 }

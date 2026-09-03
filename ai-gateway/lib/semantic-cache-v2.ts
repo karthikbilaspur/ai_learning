@@ -3,6 +3,7 @@ import {
   redis,
   exactCacheKey,
   vectorCacheKey,
+  popularityKey,
   incrCacheHit,
   incrCacheMiss,
   CacheEntry,
@@ -17,7 +18,8 @@ import crypto from 'crypto'
 
 const openai = new OpenAI({ apiKey: getEnv().OPENAI_API_KEY })
 const THRESHOLD = 0.92
-const TTL_SECONDS = 60 * 60 * 24 * 7 // 7 days
+const TTL_SECONDS = 60 * 60 * 24 * 7
+const VECTOR_TOP_K = 10
 
 async function openaiEmbedding(text: string): Promise<number[]> {
   return withResilience('openai-embedding', async () => {
@@ -28,21 +30,18 @@ async function openaiEmbedding(text: string): Promise<number[]> {
   })
 }
 
-async function checkExactCache(query: string, tenantId: string): Promise<CacheEntry | null> {
-  const hash = crypto.createHash('sha256').update(query.trim().toLowerCase()).digest('hex')
-  const cached = (await redis.get(exactCacheKey(tenantId, hash))) as CacheEntry | null
-  if (cached) {
-    await redis.zincrby('cache:popular', 1, hash)
-    return cached
-  }
-  return null
+function queryHash(query: string): string {
+  return crypto.createHash('sha256').update(query.trim().toLowerCase()).digest('hex')
 }
 
-// Real re-ranking (previously a comment claiming this happened, with no
-// call behind it). Vector similarity measures surface closeness, not
-// whether the cached answer actually satisfies the new query's intent —
-// e.g. "sales last quarter" vs "sales next quarter" embed close but need
-// different answers.
+async function checkExactCache(query: string, tenantId: string): Promise<CacheEntry | null> {
+  const hash = queryHash(query)
+  const cached = (await redis.get(exactCacheKey(tenantId, hash))) as CacheEntry | null
+  if (!cached) return null
+  await redis.zincrby(popularityKey(tenantId), 1, hash)
+  return cached
+}
+
 const rerankSchema = z.object({ sameIntent: z.boolean(), confidence: z.number().min(0).max(1) })
 
 async function rerankMatch(newQuery: string, cachedQuery: string): Promise<boolean> {
@@ -51,19 +50,19 @@ async function rerankMatch(newQuery: string, cachedQuery: string): Promise<boole
       generateObject({
         model: anthropic('claude-3-5-haiku-20241022'),
         schema: rerankSchema,
-        prompt: `Query A: "${newQuery}"\nQuery B: "${cachedQuery}"\n\nWould the correct answer to Query A also correctly and completely answer Query B (same intent, timeframe, entities)? Be strict.`,
+        prompt: `Query A: "${newQuery}"\nQuery B: "${cachedQuery}"\n\nWould the cached answer for B correctly and completely answer A? Be strict about timeframe, entities, scope.`,
       })
     )
     return object.sameIntent && object.confidence >= 0.7
   } catch {
-    return false // fail closed — a miss is safer than a wrong cached answer
+    return false
   }
 }
 
 export async function checkSemanticCacheV2(query: string, tenantId: string) {
   const exact = await checkExactCache(query, tenantId)
   if (exact) {
-    await incrCacheHit()
+    await incrCacheHit(1)
     return { hit: true as const, tier: 1, answer: exact.answer, score: 1.0, model: exact.model }
   }
 
@@ -75,35 +74,49 @@ export async function checkSemanticCacheV2(query: string, tenantId: string) {
     return { hit: false as const, degraded: true }
   }
 
-  const results = await withResilience('vector-query', () =>
-    vectorIndex.query({ vector: embedding, topK: 3, includeMetadata: true })
-  )
+  let results
+  try {
+    results = await withResilience('vector-query', () =>
+      vectorIndex.query({
+        vector: embedding,
+        topK: VECTOR_TOP_K,
+        includeMetadata: true,
+        filter: `tenantId = '${tenantId}'`,
+      })
+    )
+  } catch {
+    await incrCacheMiss()
+    return { hit: false as const, degraded: true }
+  }
 
   if (!results || results.length === 0) {
     await incrCacheMiss()
     return { hit: false as const }
   }
 
-  const top = results[0]
-  if (top && top.score > THRESHOLD) {
-    const cacheId = top.metadata?.cacheId as string
-    const cachedQuery = (top.metadata?.query as string) ?? ''
-    const cached = (await redis.get(vectorCacheKey(tenantId, cacheId))) as CacheEntry | null
+  for (const candidate of results) {
+    if (typeof candidate.score!== 'number' || candidate.score <= THRESHOLD) continue
+    const cacheId = candidate.metadata?.cacheId as string
+    const cachedQuery = (candidate.metadata?.query as string)?? ''
+    if (!cacheId ||!cachedQuery) continue
 
-    if (cached && (await rerankMatch(query, cachedQuery))) {
-      await redis.zincrby('cache:popular', 1, cacheId)
-      await incrCacheHit()
-      return { hit: true as const, tier: 2, answer: cached.answer, score: top.score, model: cached.model }
+    const cached = (await redis.get(vectorCacheKey(tenantId, cacheId))) as CacheEntry | null
+    if (!cached) continue
+
+    if (await rerankMatch(query, cachedQuery)) {
+      await redis.zincrby(popularityKey(tenantId), 1, cacheId)
+      await incrCacheHit(2)
+      return { hit: true as const, tier: 2, answer: cached.answer, score: candidate.score, model: cached.model }
     }
   }
 
   await incrCacheMiss()
-  return { hit: false as const, score: results[0]?.score ?? 0 }
+  return { hit: false as const, score: results[0]?.score?? 0 }
 }
 
 export async function setCacheV2(query: string, answer: string, model: string, tenantId: string) {
-  if (answer.length < 50) return
-  const hash = crypto.createHash('sha256').update(query.trim().toLowerCase()).digest('hex')
+  if (answer.trim().length < 50) return
+  const hash = queryHash(query)
   const cacheId = crypto.randomUUID()
   const entry: CacheEntry = { answer, model, query, createdAt: Date.now() }
 
@@ -111,10 +124,12 @@ export async function setCacheV2(query: string, answer: string, model: string, t
     await redis.set(exactCacheKey(tenantId, hash), entry, { ex: TTL_SECONDS })
     const embedding = await openaiEmbedding(query)
     await vectorIndex.upsert([
-      { id: cacheId, vector: embedding, metadata: { cacheId, query: query.slice(0, 200) } },
+      { id: cacheId, vector: embedding, metadata: { cacheId, tenantId, query: query.slice(0, 200) } },
     ])
     await redis.set(vectorCacheKey(tenantId, cacheId), entry, { ex: TTL_SECONDS })
+    await redis.zadd(popularityKey(tenantId), { score: 0, member: hash })
+    await redis.zadd(popularityKey(tenantId), { score: 0, member: cacheId })
   } catch {
-    // Caching is an optimization; a write failure shouldn't fail the request.
+    // caching is best-effort
   }
 }

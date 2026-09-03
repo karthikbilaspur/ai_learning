@@ -21,59 +21,103 @@ export const ratelimit = new Ratelimit({
 })
 
 export function isCacheableQuery(query: string): boolean {
-  if (!query || query.length < 10 || query.length > 500) return false
-  if (/\d{6,}/.test(query)) return false
-  if (query.split(' ').length < 3) return false
+  const normalized = query.trim()
+
+  if (!normalized || normalized.length < 10 || normalized.length > 500) {
+    return false
+  }
+
+  if (/\d{6,}/.test(normalized)) {
+    return false
+  }
+
+  if (normalized.split(/\s+/).length < 3) {
+    return false
+  }
+
   return true
 }
 
-// Tenant-scoped key builders — both cache tiers go through these so they
-// can't drift apart (tier 1 previously had no tenant scoping at all).
+/**
+ * Tenant-scoped cache keys.
+ */
 export function exactCacheKey(tenantId: string, hash: string) {
   return `exact:${tenantId}:${hash}`
 }
+
 export function vectorCacheKey(tenantId: string, cacheId: string) {
   return `cache:${tenantId}:${cacheId}`
 }
 
-export type CacheEntry = { answer: string; model: string; query?: string; createdAt: number }
+/**
+ * Tenant-scoped popularity.
+ *
+ * IMPORTANT:
+ * Never use one global popularity ZSET for tenant-owned cache entries.
+ */
+export function popularityKey(tenantId: string) {
+  return `cache:popular:${tenantId}`
+}
 
-export async function incrCacheHit() {
+export type CacheEntry = {
+  answer: string
+  model: string
+  query?: string
+  createdAt: number
+}
+
+/**
+ * Cache metrics.
+ */
+export async function incrCacheHit(tier: 1 | 2) {
   try {
-    await redis.incr('stats:cache_hit_tier2')
+    await Promise.all([
+      redis.incr('stats:cache_hits'),
+      redis.incr(`stats:cache_hits:tier:${tier}`),
+    ])
   } catch {
-    /* stats are best-effort */
+    // Metrics must never break requests.
   }
 }
+
 export async function incrCacheMiss() {
   try {
-    await redis.incr('stats:cache_miss')
+    await redis.incr('stats:cache_misses')
   } catch {
-    /* best-effort */
+    // Metrics are best-effort.
   }
 }
+
 export async function incrTier(tier: string) {
   try {
     await redis.incr(`stats:tier:${tier}`)
   } catch {
-    /* best-effort */
+    // Metrics are best-effort.
   }
 }
+
 export async function recordLatencySample(ttftMs: number) {
+  if (!Number.isFinite(ttftMs) || ttftMs < 0) return
+
   try {
-    // Cap the sample list so it can't grow unbounded; keep the most recent
-    // 1000 samples for a rolling p95 rather than an all-time average.
     await redis.lpush('stats:latency_samples', ttftMs)
     await redis.ltrim('stats:latency_samples', 0, 999)
   } catch {
-    /* best-effort */
+    // Metrics are best-effort.
   }
 }
+
 export async function recordTokenSample(promptTokens: number) {
+  if (!Number.isFinite(promptTokens) || promptTokens < 0) return
+
   try {
-    await redis.incrby('stats:total_prompt_tokens', promptTokens)
+    await redis.incrby(
+      'stats:total_prompt_tokens',
+      Math.round(promptTokens)
+    )
+
     await redis.incr('stats:token_sample_count')
   } catch {
-    /* best-effort */
+    // Metrics are best-effort.
   }
 }

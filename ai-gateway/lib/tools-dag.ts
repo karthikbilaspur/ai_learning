@@ -7,15 +7,11 @@ async function withToolCache<T>(key: string, ttl: number, fn: () => Promise<T>):
   try {
     const cached = (await redis.get(key)) as T | null
     if (cached) return cached
-  } catch {
-    /* cache read failure — fall through to live fetch */
-  }
+  } catch {}
   const result = await fn()
   try {
     await redis.set(key, result, { ex: ttl })
-  } catch {
-    /* cache write failure is non-fatal */
-  }
+  } catch {}
   return result
 }
 
@@ -25,20 +21,28 @@ export type ToolNode = {
   dependsOn?: string[]
 }
 
-// Real topological executor: nodes run once their dependencies have
-// resolved; independent nodes at the same level run concurrently. Used by
-// lib/tool-graph.ts to pre-resolve known dependency chains (e.g.
-// analyzeTrend needs getInternalSales's output) before the model is called,
-// rather than the model discovering the dependency itself across two
-// separate tool-call round trips.
 export async function runDag(nodes: ToolNode[], inputs: Record<string, any>): Promise<Record<string, any>> {
   const results: Record<string, any> = {}
   const remaining = new Map(nodes.map((n) => [n.id, n]))
-  const ready = (n: ToolNode) => (n.dependsOn ?? []).every((d) => d in results)
+  const failed = new Set<string>()
+
+  const ready = (n: ToolNode) => (n.dependsOn?? []).every((d) => d in results &&!failed.has(d))
 
   while (remaining.size > 0) {
     const runnable = [...remaining.values()].filter(ready)
+
     if (runnable.length === 0) {
+      const blockedByFailure = [...remaining.values()].every(n =>
+        (n.dependsOn?? []).some(d => failed.has(d))
+      )
+      if (blockedByFailure) {
+        for (const id of remaining.keys()) {
+          if (!(id in results)) {
+            results[id] = { error: `skipped due to failed dependency` }
+          }
+        }
+        break
+      }
       throw new Error(
         `DAG deadlock: unresolved nodes [${[...remaining.keys()].join(', ')}] — check dependsOn for typos or cycles`
       )
@@ -51,9 +55,13 @@ export async function runDag(nodes: ToolNode[], inputs: Record<string, any>): Pr
     )
 
     settled.forEach((outcome, i) => {
-      const node = runnable[i]
-      if (!node) return // unreachable — i is always a valid index into runnable
-      results[node.id] = outcome.status === 'fulfilled' ? outcome.value[1] : { error: String(outcome.reason) }
+      const node = runnable[i]!
+      if (outcome.status === 'fulfilled') {
+        results[node.id] = outcome.value[1]
+      } else {
+        results[node.id] = { error: String(outcome.reason) }
+        failed.add(node.id)
+      }
       remaining.delete(node.id)
     })
   }

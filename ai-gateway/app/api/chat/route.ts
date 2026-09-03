@@ -21,9 +21,9 @@ export async function POST(req: Request) {
   const lastContent = messages[messages.length - 1]?.content
   const lastQuery =
     typeof lastContent === 'string'
-      ? lastContent
+     ? lastContent
       : Array.isArray(lastContent)
-      ? lastContent.map((p: any) => p.text ?? '').join(' ')
+     ? lastContent.map((p: any) => p.text?? p.content?? '').join(' ')
       : ''
 
   const ip = req.headers.get('x-forwarded-for') || 'anon'
@@ -33,8 +33,6 @@ export async function POST(req: Request) {
   const start = Date.now()
   let ttft = 0
 
-  // Pre-resolve any known dependency-ordered tool chains (real DAG
-  // execution — see lib/tool-graph.ts for why this exists).
   const graph = await resolveToolGraphs(lastQuery)
 
   if (isCacheableQuery(lastQuery)) {
@@ -44,7 +42,7 @@ export async function POST(req: Request) {
         query: lastQuery,
         cacheHit: true,
         tier: 'cache',
-        modelId: cache.model ?? 'unknown',
+        modelId: cache.model?? 'unknown',
         cacheScore: cache.score,
         tenantId,
       })
@@ -55,11 +53,11 @@ export async function POST(req: Request) {
   const routing = await routeQueryV2(lastQuery)
   incrTier(routing.tier).catch(() => {})
 
-  const model = routing.modelId.includes('claude') ? anthropic(routing.modelId) : openai(routing.modelId)
+  const model = routing.modelId.includes('claude')? anthropic(routing.modelId) : openai(routing.modelId)
 
   const coreMessages = convertToCoreMessages(messages)
   const augmentedMessages: CoreMessage[] = graph.contextMessage
-    ? [{ role: 'system', content: graph.contextMessage }, ...coreMessages]
+   ? [{ role: 'system', content: graph.contextMessage },...coreMessages]
     : coreMessages
 
   const result = await streamText({
@@ -71,7 +69,11 @@ export async function POST(req: Request) {
       if (ttft === 0) ttft = Date.now() - start
     },
     onFinish: async ({ text, usage }) => {
-      if (text.length > 50) await setCacheV2(lastQuery, text, routing.modelId, tenantId)
+      // Fix: don't cache uncacheable queries
+      if (!isCacheableQuery(lastQuery)) return
+      if (text.trim().length > 50) {
+        await setCacheV2(lastQuery, text, routing.modelId, tenantId)
+      }
       recordLatencySample(ttft).catch(() => {})
       recordTokenSample(usage.promptTokens).catch(() => {})
       const cost = computeCost(routing.modelId, usage.promptTokens, usage.completionTokens)
@@ -93,7 +95,7 @@ export async function POST(req: Request) {
       'X-Cache': 'MISS',
       'X-Tier': routing.tier,
       'X-Model': routing.modelId,
-      'X-Confidence': String(routing.meta.confidence ?? 0),
+      'X-Confidence': String(routing.meta.confidence?? 0),
       'X-Graphs-Resolved': graph.triggeredGraphs.join(',') || 'none',
     },
   })
