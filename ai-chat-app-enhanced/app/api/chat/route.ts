@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 import { rateLimit } from "@/lib/rate-limit";
 import { calculateCost } from "@/lib/tokens";
 import { SYSTEM_PROMPTS, type PromptKey } from "@/lib/prompts";
-import { estimateInputTokens, getMessageText } from "@/lib/chat";
+import { estimateInputTokens, getMessageText } from "@/lib/validation/chat";
 import { getClientIp, jsonError } from "@/lib/http";
 import { z } from "zod";
 
