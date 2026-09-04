@@ -1,83 +1,67 @@
-AI Learning 🚀
-A hands-on repository documenting my journey into Artificial Intelligence — from fundamentals to advanced systems like LLMs, RAG, and Autonomous AI Agents.
+AI Engineering - Building Production AI Systems
+Full Stack + AI Engineer from Bangalore. I build end-to-end AI products, not just notebooks.
+Stack: Python, Next.js, React, Node.js, FastAPI, LangChain/LangGraph, Qdrant, OpenAI/Gemini
 
-This repo is currently in setup phase. Future projects, experiments, and notes will be added progressively.
+Live Demos: [RAG Chatbot] | [Research Agent] | [LLM Playground] (add links after deploy)
 
-Goal: Learn by building. Every concept = a working project.
+🚀 What I'm Building Now (Active)
+This repo is not a tutorial collection. It's my workshop for production-ready AI.
 
-🎯 Vision
-To create a structured, project-based learning path covering the complete modern AI stack — from classical ML to Generative AI and Agentic AI.
+01 - LLM API Playground [IN PROGRESS]
+File: apps/01_llm_api_playground/llm_learning.py
+Building a solid foundation for LLM apps:
 
-🔮 Future Inclusions
-1. Large Language Models (LLMs)
-LLM fundamentals and architecture (Transformer deep-dive)
-Fine-tuning LLMs with LoRA / QLoRA
-Prompt engineering & prompt optimization playground
-Open-source LLM deployment (Llama 3, Mistral, Gemma)
-LLM evaluation and benchmarking
-2. Retrieval-Augmented Generation (RAG)
-Basic RAG pipeline (Embeddings + Vector DB + LLM)
-Advanced RAG: HyDE, Re-ranking, Multi-query
-Vector databases comparison: Chroma, Pinecone, Qdrant, Weaviate
-RAG for documents, code, and images
-Production-ready RAG chatbot
-3. AI Agents & Agentic Workflows
-Tool-using agents (LangChain / LlamaIndex / OpenAI Tools)
-Multi-agent collaboration systems (CrewAI, AutoGen)
-Memory, planning, and reflection for agents
-Autonomous task agents: Research Agent, Coding Agent, Data Analysis Agent
-Agent evaluation and guardrails
-4. Generative AI
-Image generation (Stable Diffusion, DALL·E)
-Video and audio generation
-Custom dataset training for GenAI models
-5. MLOps & Deployment
-Model tracking with MLflow / Weights & Biases
-FastAPI + Docker deployment for AI apps
-RAG and Agent deployment on cloud (AWS / GCP)
-6. Core Foundations
-Python for AI, NumPy, Pandas
-Machine Learning projects (from scratch)
-Deep Learning with PyTorch / TensorFlow
-NLP, Computer Vision basics
-🗂️ Planned Repository Structure
+ LLM API calls, tokens, cost tracking
+ Streaming responses
+ Structured output (JSON mode)
+ Tool calling / Function calling
+ System vs User prompt optimization
+ Evaluation harness
+Why: Every AI product needs this layer right.
+
+02 - Production RAG Chatbot [NEXT - HIRING PROJECT]
+Folder: apps/02_rag_chatbot/
+
+Next.js 14 chat UI with streaming
+FastAPI backend
+Qdrant vector DB + OpenAI embeddings
+Upload PDFs, chat with citations
+Deployed on Vercel + Render
+Status: Starting now. This is my main portfolio project.
+
+03 - Autonomous Research Agent
+Folder: apps/03_research_agent/
+
+LangGraph agent that does web search -> reads -> writes report
+Visible chain-of-thought in UI
+Tool use, memory, guardrails
+🛠️ Tech Stack I Use
+AI Engineering: OpenAI, Gemini, LangChain, LangGraph, LlamaIndex, Qdrant, ChromaDB, HuggingFace
+Full Stack: Python, JavaScript, TypeScript, React, Next.js, Node.js, FastAPI, Postgres, Prisma
+Infra: Docker, Git, GitHub Actions, Vercel, AWS/GCP
+
+📁 Repo Structure
 ai_learning/
-├── 01_foundations/
-├── 02_machine_learning/
-├── 03_deep_learning/
-├── 04_nlp/
-├── 05_llms/
-│   ├── fine_tuning/
-│   ├── prompt_engineering/
-│   └── deployment/
-├── 06_rag/
-│   ├── basic_rag/
-│   ├── advanced_rag/
-│   └── vector_dbs/
-├── 07_ai_agents/
-│   ├── single_agent/
-│   ├── multi_agent/
-│   └── tools/
-├── 08_generative_ai/
-├── 09_mlops/
-└── projects/
-    ├── rag_chatbot/
-    ├── ai_learning_assistant/
-    └── autonomous_research_agent/
-🛣️ Roadmap
- Repository initialized
- Phase 1: Foundations & ML basics (Month 1)
- Phase 2: LLMs - Prompting, Fine-tuning, Eval (Month 2)
- Phase 3: RAG systems - From basic to production (Month 3)
- Phase 4: AI Agents - Tools, Memory, Multi-Agent (Month 4)
- Phase 5: End-to-end deployed projects + MLOps
-🛠️ Tech Stack (Planned)
-Python, PyTorch, LangChain, LlamaIndex, OpenAI, API HuggingFace, ChromaDB, Qdrant, FastAPI, Docker, Streamlit, Gradio.
+├── apps/
+│   ├── 01_llm_api_playground/   # LLM fundamentals in code
+│   ├── 02_rag_chatbot/          # Full-stack RAG product
+│   └── 03_research_agent/       # Agentic workflow
+├── experiments/                 # Quick tests
+└── README.md
+🎯 Roadmap
+Phase 1 (Now): Ship 2 production AI apps - RAG + Agent. Live demos.
+Phase 2: Add evals, Docker, CI/CD, auth, rate limiting.
+Phase 3: Advanced RAG - HyDE, re-ranking, multi-query.
+Future: Fine-tuning with LoRA, multi-agent systems.
 
-🤝 Contributions
-This is primarily a personal learning repo, but ideas, suggestions, and discussions are welcome! Feel free to open an issue.
+I learn by shipping. Every folder has working code + demo, not just notes.
 
-📬 Connect
+📊 Other Work
+I also have 15+ small AI builds in pythonproject - games with Minimax, image generators, interactive bots. This repo is focused on production AI systems.
+
+📫 Connect
 GitHub: @karthikbilaspur
+Location: Bangalore, India
+Looking for: AI Engineer / AI Full Stack Engineer roles
 
-⭐ Star this repo to follow the journey — new projects coming soon!
+⭐ Star this repo if you want to follow the build. New commits weekly.
