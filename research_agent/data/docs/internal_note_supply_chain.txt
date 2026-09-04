@@ -1,3 +1,0 @@
-Internal Analyst Note — Battery Supply Chain Risk
-
-Roughly 65% of global lithium refining capacity remains concentrated in China as of this year. Our risk model flags this as a 'high concentration' supply chain risk for any automaker without direct offtake agreements. Two clients have asked us to model a scenario where refining capacity outside China doubles by 2028.
