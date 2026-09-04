@@ -1,0 +1,16 @@
+
+# Install system dependencies (e.g. ffmpeg for voice processing)
+
+RUN apt-get update && apt-get install -y ffmpeg gcc python3-dev && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install fastapi uvicorn python-multipart langsmith
+
+COPY mini-tools/ ./mini-tools/
+COPY orchestrator.py .
+COPY main.py .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
