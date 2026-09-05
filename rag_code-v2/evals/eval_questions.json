@@ -1,0 +1,5 @@
+[
+  {"id": "q1", "question": "What is RAG?", "expected_keywords": ["Retrieval", "Augmented", "Generation"], "expected_doc": "doc_1"},
+  {"id": "q2", "question": "How does agent routing work?", "expected_keywords": ["tool", "schema", "routing"], "expected_doc": "doc_2"},
+  {"id": "q3", "question": "What metrics measure evaluation?", "expected_keywords": ["Faithfulness", "Precision", "Recall"], "expected_doc": "doc_3"}
+]
