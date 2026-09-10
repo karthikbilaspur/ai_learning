@@ -1,0 +1,21 @@
+fastapi==0.110.0
+uvicorn[standard]
+python-multipart
+pydantic==2.6.0
+requests
+python-dotenv
+
+# Speech
+faster-whisper
+piper-tts
+
+# Graph orchestration (falls back to an equivalent hand-rolled runner if absent)
+langgraph>=0.2.0
+
+# Hybrid retrieval (each degrades gracefully if not installed — see app/core/retrieval.py)
+chromadb==0.4.24
+rank-bm25==0.2.2
+sentence-transformers==2.6.1
+
+# Optional: set LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY env vars to enable tracing
+langfuse

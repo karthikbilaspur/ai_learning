@@ -1,0 +1,6 @@
+[
+  {"question": "Explain how React reconciliation works", "expected_keywords": ["virtual dom", "diff", "keys"]},
+  {"question": "How would you handle 10k concurrent requests in Node.js", "expected_keywords": ["event loop", "cluster", "backpressure"]},
+  {"question": "Your RAG is hallucinating", "expected_keywords": ["precision", "faithfulness", "eval"]},
+  {"question": "Design a rate limiter for an API", "expected_keywords": ["token bucket", "redis"]}
+]

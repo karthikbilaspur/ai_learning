@@ -1,0 +1,14 @@
+fastapi==0.110.0
+uvicorn[standard]
+python-multipart
+GitPython==3.1.42
+chromadb==0.4.24
+sentence-transformers==2.6.1
+tree-sitter==0.20.4
+tree-sitter-languages==1.10.2
+rank-bm25==0.2.2
+ollama==0.1.9
+langchain-text-splitters==0.2.0
+pydantic==2.6.0
+requests
+python-dotenv
