@@ -1,0 +1,1 @@
+export default function Visualizer({active}){ return <div className="wave">{Array.from({length:24}).map((_,i)=><span key={i} style={{animationDelay:`${i*0.04}s`, opacity: active?1:0.2, height: active?undefined:'6px'}}/>)}</div> }
