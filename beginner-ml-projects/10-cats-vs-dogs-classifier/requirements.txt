@@ -1,0 +1,5 @@
+scikit-learn
+numpy
+# For real version:
+# tensorflow
+# tensorflow-datasets
