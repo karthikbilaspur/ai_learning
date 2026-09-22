@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-sync-check
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  template:
+    spec:
+      containers:
+      - name: check
+        image: arigaio/atlas:latest
+        command: ["atlas","migrate","status","--env","prod"]
+      restartPolicy: Never

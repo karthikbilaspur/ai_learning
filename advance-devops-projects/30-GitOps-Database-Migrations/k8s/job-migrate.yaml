@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migrate-{{ .Values.revision }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: arigaio/atlas:latest
+        env:
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef: {name: db-secret, key: url}
+        command: ["atlas","migrate","apply","--env","prod","--auto-approve"]
+      restartPolicy: Never

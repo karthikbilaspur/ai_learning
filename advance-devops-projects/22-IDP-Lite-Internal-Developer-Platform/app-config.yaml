@@ -1,0 +1,8 @@
+app:
+  title: IDP Lite
+  baseUrl: http://localhost:3000
+backend:
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pr-cleanup
+  namespace: kube-system
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cleaner
+            image: bitnami/kubectl:latest
+            command: ["/bin/sh","-c","kubectl delete ns -l ephemeral=true --field-selector=status.phase!=Terminating --ignore-not-found; vcluster list --output json | jq -r '.[] | select(.ageSeconds>86400) | .name' | xargs -I{} vcluster delete {} -n {} --ignore-not-found"]
+          restartPolicy: OnFailure

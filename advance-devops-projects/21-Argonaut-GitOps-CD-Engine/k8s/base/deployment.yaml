@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: api}
+  template:
+    metadata:
+      labels: {app: api}
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/you/api:latest
+        ports: [{containerPort: 3000}]
+        livenessProbe:
+          httpGet: {path: /, port: 3000}

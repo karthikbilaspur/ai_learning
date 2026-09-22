@@ -1,0 +1,1 @@
+-- legacy bundle, prefer migrations/ dir

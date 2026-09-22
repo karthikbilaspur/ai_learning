@@ -1,0 +1,22 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-signed
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: check-cosign
+    match:
+      any:
+      - resources:
+          kinds: ["Pod"]
+    verifyImages:
+    - imageReferences: ["ghcr.io/you/*"]
+      attestors:
+      - entries:
+        - keys:
+            publicKeys: |-
+              -----BEGIN PUBLIC KEY-----
+              MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE...
+              -----END PUBLIC KEY-----

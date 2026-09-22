@@ -1,0 +1,9 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: kill-api
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    labelSelectors: {app: api}

@@ -1,0 +1,14 @@
+apiVersion: scaffolder.backstage.io/v1beta1
+kind: Template
+metadata:
+  name: new-service
+spec:
+  owner: team-a
+  type: service
+  steps:
+  - id: fetch
+    action: fetch:template
+    input:
+      url: ./content
+  - id: publish
+    action: publish:github

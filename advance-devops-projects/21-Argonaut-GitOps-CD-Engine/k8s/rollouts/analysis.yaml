@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  args:
+  - name: service
+  metrics:
+  - name: success-rate
+    interval: 30s
+    successCondition: result[0] >= 0.95
+    provider:
+      prometheus:
+        address: http://prometheus:9090
+        query: sum(rate(http_requests_success[2m])) / sum(rate(http_requests_total[2m]))

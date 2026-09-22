@@ -1,0 +1,15 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: api-allow-frontend-only
+  namespace: prod
+spec:
+  selector:
+    matchLabels: {app: api}
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/prod/sa/frontend"]
+    to:
+    - operation: {methods: ["GET","POST"]}

@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tetragon
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels: {app: tetragon}
+  template:
+    spec:
+      hostPID: true
+      containers:
+      - name: tetragon
+        image: cilium/tetragon:latest
+        securityContext: {privileged: true}
