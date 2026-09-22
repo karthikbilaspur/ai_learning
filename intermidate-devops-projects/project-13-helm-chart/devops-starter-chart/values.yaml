@@ -1,0 +1,15 @@
+replicaCount: 2
+
+image:
+  repository: devops-starter
+  tag: local
+  pullPolicy: IfNotPresent
+
+appEnv: development
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources: {}

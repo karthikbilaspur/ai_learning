@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: devops-starter
+  name: devops-app-canary
+spec:
+  # Keep the canary's replica count low relative to stable - with the
+  # Service below load-balancing evenly across pods regardless of which
+  # Deployment they belong to, replica count IS the traffic split.
+  # 1 canary : 3 stable = roughly 25% of traffic to the new version.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: devops-app
+        track: canary
+    spec:
+      containers:
+        - name: app
+          image: devops-starter:v2
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

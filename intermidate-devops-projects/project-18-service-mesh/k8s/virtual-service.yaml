@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  namespace: devops-starter
+  name: devops-app
+spec:
+  hosts:
+    - devops-app
+  http:
+    - route:
+        - destination:
+            host: devops-app
+            subset: v1
+          weight: 90
+        - destination:
+            host: devops-app
+            subset: v2
+          weight: 10
+      retries:
+        attempts: 3
+        perTryTimeout: 2s

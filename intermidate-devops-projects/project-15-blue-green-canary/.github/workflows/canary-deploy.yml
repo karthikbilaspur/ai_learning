@@ -1,0 +1,35 @@
+name: Canary Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "New image tag to canary (e.g. v3)"
+        required: true
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # This assumes kubectl is already configured against your cluster
+      # via a KUBECONFIG secret - see this project's README.
+      - name: Deploy canary at low replica count
+        run: |
+          kubectl set image deployment/devops-app-canary app=devops-starter:${{ inputs.image_tag }} -n devops-starter
+          kubectl rollout status deployment/devops-app-canary -n devops-starter
+
+      - name: Wait and check canary health
+        run: |
+          sleep 60
+          kubectl get pods -n devops-starter -l track=canary
+
+      # A real pipeline would check error rates/latency here (e.g. query
+      # Prometheus) before deciding to promote. This template stops short
+      # of that so you can wire in your own health gate.
+      - name: Manual promotion reminder
+        run: |
+          echo "If the canary looks healthy, promote it by updating"
+          echo "deployment-stable.yaml's image to devops-starter:${{ inputs.image_tag }}"
+          echo "and scaling the canary deployment back to 0."

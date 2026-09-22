@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: devops-starter
+  name: devops-app-config
+data:
+  APP_ENV: "production"

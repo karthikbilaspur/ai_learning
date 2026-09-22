@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: devops-starter
+  name: devops-app
+spec:
+  # No "track" in the selector - it matches BOTH stable and canary pods,
+  # so traffic is split between them in proportion to their replica counts.
+  selector:
+    app: devops-app
+  ports:
+    - port: 80
+      targetPort: 8000

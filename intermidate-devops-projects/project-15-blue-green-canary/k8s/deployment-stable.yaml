@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: devops-starter
+  name: devops-app-stable
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devops-app
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: devops-app
+        track: stable
+    spec:
+      containers:
+        - name: app
+          image: devops-starter:v1
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

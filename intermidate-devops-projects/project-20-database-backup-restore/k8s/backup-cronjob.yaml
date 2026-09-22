@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: devops-starter
+  name: postgres-backup
+spec:
+  schedule: "0 2 * * *"   # every day at 02:00
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:17-alpine
+              envFrom:
+                - secretRef:
+                    name: postgres-credentials
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+                  FILE="/backups/backup-$(date +%Y%m%d-%H%M%S).sql.gz"
+                  pg_dump -h postgres -U "$POSTGRES_USER" "$POSTGRES_DB" | gzip > "$FILE"
+                  echo "Wrote $FILE"
+                  # Keep only the last 7 backups
+                  cd /backups && ls -t backup-*.sql.gz | tail -n +8 | xargs -r rm --
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backups
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: postgres-backups
