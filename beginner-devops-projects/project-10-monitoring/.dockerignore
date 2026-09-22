@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+.env
+__pycache__/
+*.pyc
+.venv/
+terraform/
+k8s/
+docs/
+README.md

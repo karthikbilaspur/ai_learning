@@ -1,0 +1,18 @@
+name: Deploy to EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # This is intentionally a template.
+      # Add GitHub Secrets for your own deployment:
+      # EC2_HOST, EC2_USER, EC2_SSH_KEY
+      - name: Deployment instructions
+        run: |
+          echo "Configure SSH secrets before enabling an actual deployment."
+          echo "Recommended approach: pull the repository on EC2 and run docker compose up -d --build."
