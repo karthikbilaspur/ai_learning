@@ -1,0 +1,54 @@
+# Core ML
+torch
+torchvision
+transformers
+accelerate
+peft
+trl
+datasets
+scikit-learn
+xgboost
+lightgbm
+
+# Self-supervised / Contrastive
+lightly
+timm
+
+# Federated
+flwr[simulation]
+opacus
+
+# GNN
+torch-geometric
+
+# NAS / AutoML
+optuna
+
+# LLM Eval / Safety
+evaluate
+langchain
+
+# Synthetic Data
+# (custom TabDDPM implementation in 26_synthetic_data_diffusion needs
+# only torch + pandas + scipy + scikit-learn, already listed above)
+
+# Time Series
+# (custom RAFT forecaster needs only torch + numpy + scikit-learn, already listed above)
+
+# Quantization / Edge
+optimum
+onnx
+onnxruntime
+bitsandbytes
+auto-gptq
+
+# MLOps / Utils
+pandas
+numpy
+scipy
+matplotlib
+psutil
+pytest
+
+# Optional (only needed if you use --model openai / --target openai)
+openai

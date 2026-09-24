@@ -1,0 +1,7 @@
+cluster,Age,Annual Income (k$),Spending Score (1-100),segment_name
+0,56.33,54.27,49.07,"older, low income, low spender"
+1,26.79,57.1,48.13,"younger, low income, low spender"
+2,41.94,88.94,16.97,"older, high income, low spender"
+3,32.69,86.54,82.13,"younger, high income, high spender"
+4,25.0,25.26,77.61,"younger, low income, high spender"
+5,45.52,26.29,19.38,"older, low income, low spender"
