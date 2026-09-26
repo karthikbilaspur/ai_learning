@@ -106,6 +106,4 @@ Detailed roadmap: [docs/learning-roadmap.md](docs/learning-roadmap.md)
 
 ---
 
-**No ML overlap.** This repo is pure DevOps — Linux, Docker, CI/CD, Terraform, K8s, Monitoring.
-
 If this helps, give it a ⭐ — helps others find it.
