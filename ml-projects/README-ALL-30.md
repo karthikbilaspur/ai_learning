@@ -149,16 +149,16 @@ See each project's README for specific fixes and `LEVEL2_UPGRADE_GUIDE.md` for n
 
 ## 🧠 Learning Path
 
-**For Zero to Job-Ready:**
+**For Zero to Hero:**
 
 **Phase 1 - Beginner (Week 1-2):** 01 → 04 → 02 → 08 → 07 → 03 + 06 → 05 → 10 → 09
 Learn classification, regression, cleaning, clustering, NLP, CV.
 
 **Phase 2 - Intermediate (Week 3-4):** 11 & 16 → 13 & 15 → 12 & 18 → 14 & 19 → 17 & 20
-Learn imbalance handling, text preprocessing, time features, business interpretation. Projects 14, 16, 18, 20 are interview gold.
+Learn imbalance handling, text preprocessing, time features, business interpretation. 
 
 **Phase 3 - Advanced (Week 5-8):** 24, 26, 27, 30 (offline) → 21, 22, 23 (CIFAR/MNIST) → 28, 29, 25 (LLM stack)
-Learn research implementation, federated, GNN, diffusion, RAG, RLHF, quantization, safety. If you can explain 21, 22, 28 you're senior ML.
+Learn research implementation, federated, GNN, diffusion, RAG, RLHF, quantization, safety. 
 
 ---
 
