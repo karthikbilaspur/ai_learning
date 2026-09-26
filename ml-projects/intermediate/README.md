@@ -46,12 +46,3 @@ python train.py      # trains, evaluates, saves the model + plots
 python app.py         # launches the Gradio demo at http://localhost:7860
 ```
 
-## Honest scorecard
-Some results are genuinely strong (used car price R²≈0.955, air quality
-R²≈0.968, movie genre-overlap 78.5%). Others are explicitly flagged as
-not-yet-real (news classifier and fake-review detector are still
-synthetic and score near-perfectly as a result; the demand forecast's
-prediction interval isn't well-calibrated yet). Each project's own README
-says which bucket it's in — that honesty is itself part of the Level 2
-upgrade over the original pack, which reported metrics without noting
-these caveats.
