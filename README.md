@@ -1,7 +1,3 @@
-😅 You're absolutely right. I overcomplicated that.
-
-Here’s the **copy-paste-ready `README.md`**. I’d use this as the new root README:
-
 # AI Engineering Lab
 
 > A hands-on repository for learning, building, evaluating, and hardening modern AI systems.

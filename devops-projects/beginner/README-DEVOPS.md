@@ -10,9 +10,8 @@ A progressive DevOps portfolio designed for beginners. 10 standalone projects, e
 [[Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?logo=terraform)]()
 [[CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-black?logo=githubactions)]()
 
-## Architecture Progression
+ Architecture Progression
 
-```
 Project 01: Linux + Git
     ↓
 Project 02: FastAPI App (Python)
@@ -32,11 +31,11 @@ Project 08: Terraform + AWS EC2
 Project 09: Kubernetes (Deployment + Service)
     ↓
 Project 10: Monitoring (Prometheus + Grafana) — FULL STACK
-```
 
-## Projects
+ Projects
 
-| # | Project | What You Learn | Key Tools |
+|  | Project | What You Learn | Key Tools |
+
 |---|---------|----------------|-----------|
 | **01** | [project-01-linux-and-git](project-01-linux-and-git/) | Linux server basics, file system, permissions, Git workflow | Ubuntu, Bash, Git |
 | **02** | [project-02-python-app](project-02-python-app/) | Build a production-ready API | Python, FastAPI, Uvicorn |
@@ -49,37 +48,40 @@ Project 10: Monitoring (Prometheus + Grafana) — FULL STACK
 | **09** | [project-09-kubernetes](project-09-kubernetes/) | Running workloads in K8s | Kubernetes, kubectl, K8s Manifests |
 | **10** | [project-10-monitoring](project-10-monitoring/) | Observability & monitoring | Prometheus, Grafana, Alerting |
 
-## How to Use
+ How to Use
 
 **Recommended path (beginner):**
-```bash
-# Clone
-git clone <your-repo-url>
+
+ Clone
+
+git clone  <your-repo-url>
+
 cd devops-starter
 
-# Start with Project 01
+ Start with Project 01
+
 cd project-01-linux-and-git
 cat README.md
-```
 
 **Jump to any topic:**
 Each folder is independent. Want to practice only Kubernetes?
+
 ```bash
 cd project-09-kubernetes/
-# Follow its README
+ Follow its README
 ```
 
 **Finished version:**
 `project-10-monitoring/` contains everything — app + Docker + Compose + Nginx + CI + Deploy + Terraform + Kubernetes + Monitoring. Treat it as the final production setup.
 
-## Prerequisites
+ Prerequisites
 
 - Git, Docker Desktop, Python 3.10+
 - For Project 08: AWS account + AWS CLI configured
 - For Project 09: minikube or kind, or any K8s cluster
 - Basic command line knowledge
 
-## Learning Path
+ Learning Path
 
 **Phase 1 — Fundamentals (01-03):** OS, Git, App, Testing
 **Phase 2 — Containerization (04-05):** Docker, Compose, Nginx
@@ -88,7 +90,7 @@ cd project-09-kubernetes/
 
 Detailed roadmap: [docs/learning-roadmap.md](docs/learning-roadmap.md)
 
-## Shared Documentation
+ Shared Documentation
 
 - [docs/learning-roadmap.md](docs/learning-roadmap.md) — Phase-by-phase roadmap
 - [docs/interview-questions.md](docs/interview-questions.md) — 100+ DevOps interview Q&A covering all 10 topics
@@ -96,7 +98,7 @@ Detailed roadmap: [docs/learning-roadmap.md](docs/learning-roadmap.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [LICENSE](LICENSE)
 
-## What You Will Be Able To Do After Project 10
+ What You Will Be Able To Do After Project 10
 
 - Provision infrastructure with Terraform on AWS
 - Containerize and run apps with Docker & Compose behind Nginx
@@ -105,7 +107,3 @@ Detailed roadmap: [docs/learning-roadmap.md](docs/learning-roadmap.md)
 - Monitor with Prometheus + Grafana dashboards
 
 ---
-
-**No ML overlap.** This repo is pure DevOps — Linux, Docker, CI/CD, Terraform, K8s, Monitoring.
-
-If this helps, give it a ⭐ — helps others find it.
